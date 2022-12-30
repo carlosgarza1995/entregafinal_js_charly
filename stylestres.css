@@ -1,0 +1,73 @@
+body::before {
+    content: ""; /* Important */
+    z-index: -1; /* Important */
+    position: inherit;
+    left: inherit;
+    top: inherit;
+    width: inherit;
+    height: inherit;
+    background-image: inherit;
+    background-size: cover;
+    filter: blur(2px);
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-image: url("./imagenes/playa-sayu.webp");
+    background-size: 0 0;  /* Image should not be drawn here */
+    width: 100%;
+    height: 100%;
+    position: absolute; /* Or absolute for scrollable backgrounds */
+  
+}
+
+
+#contenedorHabitaciones {
+  display: flex;
+  flex-direction: row;
+  row-gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+}
+
+#contenedorHabitaciones div {
+width: 20rem;
+height: auto;
+padding: 1rem;
+
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+
+}
+
+
+.card {
+    justify-content: center;
+    box-shadow: 2px 2px 15px grey;
+}
+
+.typeHabitacionImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+}
+
+#contenedorHabitaciones button {
+    display: flex;
+    
+}
+
+.title {
+    font-weight: 900;
+    font-size: 8vh;
+    text-shadow: 3px 3px 8px black;
+}
+
+.description {
+    font-weight: 700;
+    text-shadow: 3px 3px 8px black;
+}
