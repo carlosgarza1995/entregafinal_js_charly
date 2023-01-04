@@ -1,3 +1,9 @@
+fetch("./data.json")
+.then(respuesta => respuesta.json())
+.then(habitaciones => {
+
+// ------------------------------------ LOGICA PRINCIPAL
+
 function estimado(noches, personas, precioHab) { 
     let personaExtra = 250;
     let costoExtra = 0;
@@ -14,18 +20,16 @@ function estimado(noches, personas, precioHab) {
     return precioEstimado;
 }
 
-const habitaciones = [ 
-    { id: 1, tipo: "Plus", precio: 1250, tamano: "30m2", amenidades: "A/C, Wifi, Toiletries, WC Privado", imgUrl: "./imagenes/plus.jpg"},  // Esto es un objeto
-    { id: 2, tipo: "Estandar", precio: 1100, tamano: "25m2", amenidades: "A/C, Wifi, Toiletries, WC Privado", imgUrl: "./imagenes/estandar.jpg"},
-    { id: 3, tipo: "Micro", precio: 900, tamano: "15m2", amenidades: "A/C, Wifi, Toiletries, WC Compartido", imgUrl: "./imagenes/micro.jpg"},
-    { id: 4, tipo: "Cabina", precio: 500, tamano: "5m2", amenidades: "A/C, Wifi, WC Compartido", imgUrl: "./imagenes/cabina.jpg"}
-]
+// ------------------------------------ CARRITO
 
-let contenedorHabitaciones = document.getElementById("contenedorHabitaciones")
-let seleccion = document.getElementById("Habitacion Seleccionada")
-let arrayHabitaciones = [ ]
+function miPrograma(seleccion)
+let contenedorSeleccion = document.getElementById("contenedorHabitaciones")
+let carrito = document.getElementById("carrito")
+let arrayCarrito = [] 
 
 renderizarHabitaciones(habitaciones)
+
+// ------------------------------------ CARDS
 
 function renderizarHabitaciones(arrayHabitaciones) {
     contenedorHabitaciones.innerHTML = ''
@@ -35,14 +39,16 @@ function renderizarHabitaciones(arrayHabitaciones) {
 
         tarjetaHabitacion.innerHTML = `
         <div class="card">
+
         <img class="card-img" src=${habitacion.imgUrl}>
         <h4 class="card-title pt-2">${habitacion.tipo}</h4>
         <p class="card-text">Amenidades: ${habitacion.amenidades}</p>
+        <p class="card-text">Capacidad: ${habitacion.capacidad} persona(s)</p>
         <h6 class="card-subtitle pb-2">${"$" + habitacion.precio + " MXN"}</h6>
         <button type="button" class="btn btn-danger bg-gradient justify-content-center" id=${habitacion.id}>Seleccionar</button>
+        
         </div>
         `
-
         contenedorHabitaciones.append(tarjetaHabitacion)
 
         let boton = document.getElementById(habitacion.id)
@@ -51,6 +57,9 @@ function renderizarHabitaciones(arrayHabitaciones) {
     }
 }
 
+
+// ------------------------------------
+
 let precioHabitacion = 0;
 
 function tipoHabitacion(event) {
@@ -58,9 +67,10 @@ function tipoHabitacion(event) {
   
   if (tipoHabitacion) {
     qtyNoches();
-
   }
 }
+
+// ------------------------------------
 
 let cantidadNoches = 0;
 async function qtyNoches() { // Cuantas noches
@@ -87,6 +97,8 @@ async function qtyNoches() { // Cuantas noches
     }
 }
 
+// ------------------------------------
+
 let cantidadPersonas = 0;
 async function qtyPersonas() { // Cuantas noches
   const ipAPI = '//api.ipify.org?format=json'
@@ -112,9 +124,10 @@ async function qtyPersonas() { // Cuantas noches
   }
 }
 
-function totalEstimado() { // resultado final de la cotizacion
-  let precioEstimado = estimado(cantidadNoches, cantidadPersonas, precioHabitacion);
+// ------------------------------------ TOTAL
 
+function totalEstimado() { 
+  let precioEstimado = estimado(cantidadNoches, cantidadPersonas, precioHabitacion);
 
     Swal.fire({
         title: 'Tu precio estimado es de:',
@@ -122,9 +135,49 @@ function totalEstimado() { // resultado final de la cotizacion
         icon: 'success',
         confirmButtonText: 'Cool'
       })
-    
 }
 
 // ------------------------------------
+
+function agregarAlCarrito(e) {
+  let habitacionBuscado = habitacion.find(habitacion => habitacion.id == e.target.id)
+  let posicionHabitacion = arrayCarrito.findIndex(habitacion => habitacion.id == e.target.id)
+
+  if (posicionHabitacion != -1) {
+    arrayCarrito[posicionHabitacion] = {
+      id: arrayCarrito[posicionHabitacion].id, 
+      tipo: arrayCarrito[posicionHabitacion].tipo, 
+      precio: arrayCarrito[posicionHabitacion].precio
+    }
+  } else {
+    arrayCarrito.push({
+      id: productoBuscado.id, 
+      nombre: productoBuscado.tipo, 
+      precio: productoBuscado.precio
+    })
+  }
+
+  renderizarCarrito()
+}
+
+// ------------------------------------
+
+function renderizarCarrito() {
+  carrito.innerHTML = ""
+  for (const itemCarrito of arrayCarrito) {
+    carrito.innerHTML += `
+  <div class="itemCarrito">
+  <h4>${itemCarrito.tipo}</h4>
+  <h4>${itemCarrito.precio}</h4>
+  </div>
+  `
+  }
+}
+
+// ------------------------------------
+
+}) // FETCH
+
+
  
 //let precioEstimado = estimado(qtyNoches, qtyPersonas, precioHabitacion);
